@@ -4,24 +4,71 @@
     <title>Cominect</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
+    <header>
     <% if user_signed_in? %>
-      <li>
-        <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+
+     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"><span>cominect</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDoropdown" aria-controls="#navbarNavDoropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDoropdown">
+          <ul class="navbar-nav ml-auto">
+
+
+
+    <li class="nav-item active">
+        <i class= "fas fa-crown  navlink text-light"><%= link_to '人気作品', root_path %></i>
+    </li>
+
+    <li class="nav-item">
+        <i class= "fas fa-book-medical  navlink text-light"><%= link_to '投稿フォーム', new_comic_path %></i>
+    </li>
+
+    <li class="nav-item">
+        <i class="fas fa-book navlink text-light"><%= link_to '作品一覧', comics_path %></i>
+    </li>
+
+    <li class="nav-item">
+        <i class="<i fas fa-tags navlink text-light"><%= link_to 'ジャンル追加', new_genre_path %></i>
+    </li>
+
+    <li class="nav-item">
+      <i class="far fa-user navlink text-light"><%= link_to 'マイページ', user_path(current_user.id) %></i>
+    </li>
+
+      <li class="nav-item">
+        <i class="fas fa-sign-out-alt navlink text-light"><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></i>
       </li>
     <% else %>
       <li>
+          <%= link_to '人気作品', root_path %>
+      </li>
+
+      <li>
+        <%= link_to '作品一覧', comics_path %>
+      </li>
+
+
+      <li>
         <%= link_to "新規登録", new_user_registration_path %>
       </li>
+
       <li>
         <%= link_to "ログイン", new_user_session_path %>
       </li>
     <% end %>
+
+    </header>
     <%= yield %>
+
+
   </body>
 </html>

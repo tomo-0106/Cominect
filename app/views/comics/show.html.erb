@@ -1,0 +1,86 @@
+<div class="comic-body">
+  <p><%= attachment_image_tag @comic, :image, size: "50x50", format: 'jpeg', fallback: "no_image.jpg" %></p>
+
+  <p>作品名：<%= @comic.title %></p>
+  <p>あらすじ：<%= @comic.body %></p>
+  <p>ジャンル:<% if @comic.genre %><%= @comic.genre.name %><% end %></p>
+  <p>作者：<%= @comic.author %></p>
+  <p>出版社：<%= @comic.publisher %></p>
+  <p id="star">評価 :</p>
+
+<div class="col-md-6 mb-3">
+        <div class=" posts-content">
+
+
+
+  <% if @comic.user == current_user %>
+    <%= link_to "作品を削除", comic_path(@comic), method: :delete %>
+  <% end %>
+
+</div>
+
+<div class="new-comment">
+ <%= form_with(model:[@comic, @review], local: true) do |f| %>
+ <div class="form-group row" id="form_star" >
+    <%= f.label :rate,'評価 ', class:'col-md-3 col-form-label' %>
+    <%= f.hidden_field :rate, id: :review_star %>
+ </div>
+
+   <%= f.text_area :body,placeholder: "未記入でも、評価のみで投稿できます" %>
+   <%= f.submit "投稿する" %>
+
+ <% end %>
+</div>
+
+<div class="comments">
+  <p>コメント件数：<%= @comic.reviews.count %></p>
+
+<% @comic.reviews.each do |review| %>
+<%= attachment_image_tag review.user, :profile_image, :fill, 60, 60, fallback: "no_image.jpg" %>
+
+<div id="star-rate-<%= review.id %>"></div>
+          <script>
+          $('#star-rate-<%= review.id %>').raty({
+            size: 36,
+            starOff:  '<%= asset_path('star-off.png') %>',
+            starOn : '<%= asset_path('star-on.png') %>',
+            starHalf: '<%= asset_path('star-half.png') %>',
+            half: true,
+            readOnly: true,
+            score: "<%= review.rate || nil %>",
+          });
+          </script>
+  <%= review.user.name %>
+  <%= review.body %>
+   <% if review.user == current_user %>
+  <div class="review-delete">
+    <%= link_to "削除", comic_review_path(review.comic, review), method: :delete %>
+  </div>
+  <% end %>
+<% end %>
+</div>
+</div>
+
+<script>
+
+  $('#star').raty({
+   size: 36,
+   starOn: "<%= asset_path('star-on.png') %>",
+   starOff: "<%= asset_path('star-off.png') %>",
+   starHalf: "<%= asset_path('star-half.png') %>",
+   scoreName: 'review[rate]',
+   half: true,
+   readOnly: true,
+   score: "<%= @comic.reviews.average(:rate).to_f.round(1) %>",
+ });
+
+ $('#form_star').raty({
+   size: 36,
+   starOn: "<%= asset_path('star-on.png') %>",
+   starOff: "<%= asset_path('star-off.png') %>",
+   starHalf: "<%= asset_path('star-half.png') %>",
+   scoreName: 'review[rate]',
+   half: true,
+ });
+</script>
+

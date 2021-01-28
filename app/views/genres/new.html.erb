@@ -1,0 +1,14 @@
+<h1>ジャンル作成</h1>
+<%= form_with model: @genre, local:true do |f| %>
+  <h4>ジャンル名</h4>
+  <%= f.text_field :name %>
+  <%= f.submit 'ジャンル追加' %>
+<% end %>
+
+
+<h2>ジャンル一覧</h2>
+<% @genres.each do |genre| %>
+<%= link_to genre_path(genre.id) do %>
+<%= genre.name %>
+<% end %>
+<% end %>
