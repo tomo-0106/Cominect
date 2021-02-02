@@ -1,42 +1,66 @@
-<div class="profile-container">
+<div class="container py-5 custom-gutters-pro">
 
-  <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "no_image.jpg" %>
+  <h1>マイページ</h1>
 
-  <h3 class="profile-name"><%= @user.name %></h3>
-
-  <% if @user.id == current_user.id %>
-    <p><%= link_to "プロフィール編集", edit_user_path(@user) %></p>
-  <% end %>
-
+  <div class="row mt-5 m-5">
+    <div class="col md-5">
+      <%= attachment_image_tag @user, :profile_image, :fill, 170, 170, fallback: "no_image.jpg" %>
+    </div>
+    <div class="col md-4 m-5">
+      <h2 class="profile-name">名前：<%= @user.name %></h2>
+      <% if @user.id == current_user.id %>
+          <%= link_to "プロフィール編集", edit_user_path(@user) %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
-<div>
-  <h1>お気に入り作品</h1>
-  
+<div class="container custom-gutters-pro">
+    <h1>お気に入り作品</h1>
 
-<% @comics.each do |comic| %>
-    <%= link_to comic_path(comic.id) do %>
-      <p><%= attachment_image_tag comic, :image, size: "50x50", format: 'jpeg', fallback: "no_image.jpg" %></p>
-    <% end %>
-    <p><%= comic.title %></p>
+    <div class="row">
+      <% @comics.each do |comic| %>
+        <div class="col col-12 col-md-2 col-lg-2 m-lg-2">
+          <%= link_to comic_path(comic.id) do %>
+          <p><%= attachment_image_tag comic, :image, size: "150x150", format: 'jpeg', fallback: "no_image.jpg" %></p>
+          <% end %>
 
-    <% if comic.favorited_by?(current_user) %>
-      <p>
-        <%= link_to comic_favorites_path(comic), method: :delete do %>
-          ♥<%= comic.favorites.count %>
-        <% end %>
-      </p>
-    <% else %>
-      <p>
-        <%= link_to comic_favorites_path(comic), method: :post do %>
-          ♡<%= comic.favorites.count %>
-        <% end %>
-      </p>
-    <% end %>
-  <% end %>
+
+          <div class="">
+            <span><%= comic.title %></span>
+            <% if comic.favorited_by?(current_user) %>
+            <span>
+            <%= link_to comic_favorites_path(comic), method: :delete do %>
+            ♥<%= comic.favorites.count %>
+            <% end %>
+            </span>
+            <% else %>
+            <span>
+            <%= link_to comic_favorites_path(comic), method: :post do %>
+            ♡<%= comic.favorites.count %>
+            <% end %>
+            </span>
+            <% end %>
+          </div>
   
-  
-  
+           <script>
+            $("#star-index-<%=comic.id%>").raty({
+             size: 36,
+             starOn: "<%= asset_path('star-on.png') %>",
+             starOff: "<%= asset_path('star-off.png') %>",
+             starHalf: "<%= asset_path('star-half.png') %>",
+            // scoreName: 'review[rate]',
+             half: true,
+             readOnly: true,
+             score: "<%= comic.reviews.average(:rate).to_f.round(1) %>",
+           });
+          </script>
+           <div id="star-index-<%= comic.id %>"></div>
+        </div>
+      <% end %>
+<%= paginate @comics %>
+    </div>
+
 </div>
 
 

@@ -1,7 +1,10 @@
 class ComicsController < ApplicationController
+  before_action :authenticate_user!
+  
 
   def new
     @comic = Comic.new
+
   end
 
   def show
@@ -12,6 +15,7 @@ class ComicsController < ApplicationController
   def index
     @comics = Comic.all
     @users = User.all
+    @comics = Comic.page(params[:page]).reverse_order
     if params[:genre_id]
       @genre = Genre.find(params[:genre_id])
       @genres = Genre.all
@@ -23,8 +27,11 @@ class ComicsController < ApplicationController
   def create
   @comic = Comic.new(comic_params)
   @comic.user_id = current_user.id
-  @comic.save
-  redirect_to comics_path
+    if @comic.save
+        redirect_to  comics_path
+    else
+        render :new
+    end
   end
 
   def edit
@@ -40,6 +47,21 @@ class ComicsController < ApplicationController
     @comic.destroy
     redirect_to comics_path
   end
+
+  def search
+    method = params[:search_method]
+    word = params[:search_word]
+    @comics = Comic.search(method,word).page(params[:page]).reverse_order
+    render :index
+  end
+
+  def correct_comic
+        @comic = Comic.find_by(params[:id])
+    unless @comic.user.id == current_user.id
+      render  new_comic_path
+    end
+  end
+
 
   private
   def comic_params

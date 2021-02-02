@@ -1,70 +1,180 @@
-<div class="row d-flex aline-items-center">
-	<strong class="red-border px-3 pb-1">ジャンル検索</strong>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-3">
+      <div class="offset-1 col-10">
+          <div class="row d-flex aline-items-center">
+
+            <strong class="red-border px-3 pb-1">ジャンル検索</strong>
+          </div>
+          <div class="row mx-auto mt-3">
+            <span class="brown-border text-center"><%= link_to "すべての商品", comics_path %></span>
+          </div>
+          <% if @genres.present? %>
+            <% @genres.each do |genre| %>
+              <%= link_to comics_path(genre_id: genre.id) do %>
+                <div class="row mx-auto mt-3">
+                  <span class="brown-border text-center"><%= genre.name %></span>
+                </div>
+              <% end %>
+            <% end %>
+          <% end %>
+          </div>
+      </div>
+
+      <div class="col-9">
+         <%= form_tag(comics_search_path , method: :get) do %>
+                  <%= select(@search_content, :search_method, [["前方一致","forward_match"], ["後方一致","backward_match"], ["完全一致","perfect_match"], ["部分一致","partial_match"]])%>
+                  <%= text_field(@search_content, :search_word) %>
+                  <%= submit_tag "作品名検索" %>
+              <% end %>
+
+      <div class="row">
+        <h2 class="red-border px-3">
+          <% if @genre.present? %>
+            <h1><%= @genre.name %></h1>
+          <% else %>
+            <h1>すべての商品</h1>
+          <% end %>
+        </h2>
+      </div>
+　　　<% if user_signed_in? %>
+        <div class="container custom-gutters-pro">
+              <div class="row ">
+              <% if @genre.present? %>
+                  <% @genre.comics.each do |comic| %>
+                  <div class="col col-12 col-md-2 col-lg-3">
+                        <%= link_to comic_path(comic.id) do %>
+                            <%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
+                        <% end %>
+                        <div>
+                          <strong class="red-border"><%= comic.title %></strong>
+                          <% if comic.favorited_by?(current_user) %>
+                              <%= link_to comic_favorites_path(comic), method: :delete do %>
+                                ♥<%= comic.favorites.count %>
+                              <% end %>
+                          <% else %>
+                              <%= link_to comic_favorites_path(comic), method: :post do %>
+                                ♡<%= comic.favorites.count %>
+                              <% end %>
+                          <% end %>
+                        </div>
+
+                        <script>
+                          $("#star-index-<%=comic.id%>").raty({
+                           size: 36,
+                           starOn: "<%= asset_path('star-on.png') %>",
+                           starOff: "<%= asset_path('star-off.png') %>",
+                           starHalf: "<%= asset_path('star-half.png') %>",
+                          // scoreName: 'review[rate]',
+                           half: true,
+                           readOnly: true,
+                           score: "<%= comic.reviews.average(:rate).to_f.round(1) %>",
+                         });
+                        </script>
+                            <div id="star-index-<%= comic.id %>"></div>
+                      </div>
+                  <% end %>
+              <% else %>
+                  <% @comics.each do |comic| %>
+                      <div class="col col-12 col-md-2 col-lg-3">
+                        <%= link_to comic_path(comic.id) do %>
+                            <%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
+                        <% end %>
+                        <div>
+                          <strong class="red-border"><%= comic.title %></strong>
+                          <% if comic.favorited_by?(current_user) %>
+                              <%= link_to comic_favorites_path(comic), method: :delete do %>
+                                ♥<%= comic.favorites.count %>
+                              <% end %>
+                          <% else %>
+                              <%= link_to comic_favorites_path(comic), method: :post do %>
+                                ♡<%= comic.favorites.count %>
+                              <% end %>
+                          <% end %>
+                        </div>
+
+                        <script>
+                          $("#star-index-<%=comic.id%>").raty({
+                           size: 36,
+                           starOn: "<%= asset_path('star-on.png') %>",
+                           starOff: "<%= asset_path('star-off.png') %>",
+                           starHalf: "<%= asset_path('star-half.png') %>",
+                          // scoreName: 'review[rate]',
+                           half: true,
+                           readOnly: true,
+                           score: "<%= comic.reviews.average(:rate).to_f.round(1) %>",
+                         });
+                        </script>
+                          <div id="star-index-<%= comic.id %>"></div>
+                      </div>
+                  <% end %>
+              <% end %>
+          </div>
+        </div>
+
+    　<% else %>
+
+      　<div class="container custom-gutters-pro">
+        　<div class="row">
+            <% if @genre.present? %>
+              <% @genre.comics.each do |comic| %>
+                <div class="col col-12 col-md-2 col-lg-3">
+                  <%= link_to comic_path(comic.id) do %>
+                    <%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
+                  <% end %>
+                  <div>
+                    <strong class="red-border"><%= comic.title %></strong>
+                     ♡<%= comic.favorites.count %>
+                  </div>
+                  <script>
+                    $("#star-index-<%=comic.id%>").raty({
+                     size: 36,
+                     starOn: "<%= asset_path('star-on.png') %>",
+                     starOff: "<%= asset_path('star-off.png') %>",
+                     starHalf: "<%= asset_path('star-half.png') %>",
+                    // scoreName: 'review[rate]',
+                     half: true,
+                     readOnly: true,
+                     score: "<%= comic.reviews.average(:rate).to_f.round(1) %>",
+                   });
+                  </script>
+                  　<div id="star-index-<%= comic.id %>"></div>
+                </div>
+              <% end %>
+            <% else %>
+                <% @comics.each do |comic| %>
+                <div class="col col-12 col-md-2 col-lg-3">
+                  <%= link_to comic_path(comic.id) do %>
+                    <%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
+                  <% end %>
+                  <div>
+                    <strong class="red-border"><%= comic.title %></strong>
+                     ♡<%= comic.favorites.count %>
+                  </div>
+              　　　<div id="star-index-<%= comic.id %>"></div>
+                  <script>
+                    $("#star-index-<%=comic.id%>").raty({
+                     size: 36,
+                     starOn: "<%= asset_path('star-on.png') %>",
+                     starOff: "<%= asset_path('star-off.png') %>",
+                     starHalf: "<%= asset_path('star-half.png') %>",
+                    // scoreName: 'review[rate]',
+                     half: true,
+                     readOnly: true,
+                     score: "<%= comic.reviews.average(:rate).to_f.round(1) %>",
+                   });
+                  </script>
+                </div>
+                <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+       <%= paginate @comics %>
+    </div>
+  </div>
 </div>
 
-<div class="row mx-auto mt-3">
-	<span class="brown-border text-center"><%= link_to "すべての商品", comics_path %></span>
-</div>
-
-<!--ジャンル検索-->
-<% if @genres.present? %>
-  <% @genres.each do |genre| %>
-  	<%= link_to comics_path(genre_id: genre.id) do %>
-      <div class="row mx-auto mt-3">
-  			<span class="brown-border text-center"><%= genre.name %></span>
-  		</div>
-  	<% end %>
-  <% end %>
-<% end %>
 
 
-<% if @genre.present? %>
-  <% @genre.comics.each do |comic| %>
-    <%= link_to comic_path(comic.id) do %>
-      <p><%= attachment_image_tag comic, :image, size: "50x50", format: 'jpeg', fallback: "no_image.jpg" %></p>
-    <% end %>
-    <p><%= comic.title %></p>
-
-    <% if comic.favorited_by?(current_user) %>
-      <p>
-        <%= link_to comic_favorites_path(comic), method: :delete do %>
-          ♥<%= comic.favorites.count %>
-        <% end %>
-      </p>
-      <% else %>
-      <p>
-        <%= link_to comic_favorites_path(comic), method: :post do %>
-          ♡<%= comic.favorites.count %>
-        <% end %>
-      </p>
-    <% end %>
-  <% end %>
-<% else %>
-  <% @comics.each do |comic| %>
-    <%= link_to comic_path(comic.id) do %>
-      <p><%= attachment_image_tag comic, :image, size: "50x50", format: 'jpeg', fallback: "no_image.jpg" %></p>
-    <% end %>
-    <p><%= comic.title %></p>
-
-    <% if comic.favorited_by?(current_user) %>
-      <p>
-        <%= link_to comic_favorites_path(comic), method: :delete do %>
-          ♥<%= comic.favorites.count %>
-        <% end %>
-      </p>
-    <% else %>
-      <p>
-        <%= link_to comic_favorites_path(comic), method: :post do %>
-          ♡<%= comic.favorites.count %>
-        <% end %>
-      </p>
-    <% end %>
-  <% end %>
-<% end %>
-
-
-<!--<div class="row">-->
-<!--  <h2 class="red-border px-3">-->
-<!--  </h2>-->
-<!--</div>-->
 

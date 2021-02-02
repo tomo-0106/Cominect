@@ -8,5 +8,7 @@ class User < ApplicationRecord
    has_many :reviews, dependent: :destroy
    attachment :profile_image
    has_many :favorites, dependent: :destroy
+   has_many :favorited_comics, through: :favorites, source: :comic
+
 
 end

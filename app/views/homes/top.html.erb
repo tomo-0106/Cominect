@@ -1,102 +1,105 @@
-<% if user_signed_in? %>
-  <h1>評価ランキング</h1>
-  <% @all_ranks.each.with_index(1) do |comic, i| %>
-    第
-    <%= i %>
-    位
-    <%= link_to comic_path(comic.id) do %>
-      <p><%= attachment_image_tag comic, :image, size: "50x50", format: 'jpeg', fallback: "no_image.jpg" %></p>
-    <% end %>
-    <p><%= comic.title %></p>
+<div class="">
+  <% if user_signed_in? %>
+    <div class="container  custom-gutters-pro">
 
-    <% if comic.favorited_by?(current_user) %>
-      <p>
-        <%= link_to comic_favorites_path(comic), method: :delete do %>
-          ♥<%= comic.favorites.count %>
+      <h1 class="text-warning">⭐️評価ランキング⭐️</h1>
+
+      <div class="row">
+        <% @all_ranks.each.with_index(1) do |comic, i| %>
+          <div class="col col-12 col-md-2 col-lg-2 m-lg-3">
+            第<%= i %>位
+            <%= link_to comic_path(comic.id) do %>
+              <p><%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg" %></p>
+            <% end %>
+            <%= comic.title %>
+            <div class="">
+                <% if comic.favorited_by?(current_user) %>
+                    <%= link_to comic_favorites_path(comic), method: :delete do %>
+                      ♥<%= comic.favorites.count %>
+                    <% end %>
+                <% else %>
+                  <%= link_to comic_favorites_path(comic), method: :post do %>
+                    ♡<%= comic.favorites.count %>
+                  <% end %>
+                <% end %>
+                <%= link_to comic_path(comic.id) do %>
+                  ⭐️<%= comic.reviews.average(:rate).to_f.round(1) %>
+                <% end %>
+            </div>
+          </div>
         <% end %>
-      </p>
-    <% else %>
-      <p>
-      <%= link_to comic_favorites_path(comic), method: :post do %>
-        ♡<%= comic.favorites.count %>
-      <% end %>
-      </p>
-    <% end %>
-    <%= link_to comic_path(comic.id) do %>
-      ⭐️<%= comic.reviews.average(:rate).to_f.round(1) %>
-    <% end %>
-  <% end %>
+      </div>
+    </div>
 
-  <h1>お気に入りランキング</h1>
-
-  <% @all_rank.each.with_index(1) do |comic, i| %>
-    第
-    <%= i %>
-    位
-    <%= link_to comic_path(comic.id) do %>
-      <p><%= attachment_image_tag comic, :image, size: "50x50", format: 'jpeg', fallback: "no_image.jpg" %></p>
-    <% end %>
-    <p><%= comic.title %></p>
-
-    <% if comic.favorited_by?(current_user) %>
-      <p>
-        <%= link_to comic_favorites_path(comic), method: :delete do %>
-          ♥<%= comic.favorites.count %>
+    <div class="container my-5 custom-gutters-pro">
+      <h1 class="text-danger">💓お気に入りランキング💓</h1>
+  　　<div class="row">
+        <% @all_rank.each.with_index(1) do |comic, i| %>
+          <div class="col col-12 col-md-2 col-lg-2 m-lg-3">
+             <h5>第<%= i %>位</h5>
+            <%= link_to comic_path(comic.id) do %>
+             　<p><%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg" %></p>
+            <% end %>
+            <%= comic.title %>
+            <div class="">
+              <% if comic.favorited_by?(current_user) %>
+                  <%= link_to comic_favorites_path(comic), method: :delete do %>
+                    ♥<%= comic.favorites.count %>
+                  <% end %>
+              <% else %>
+                <%= link_to comic_favorites_path(comic), method: :post do %>
+                  ♡<%= comic.favorites.count %>
+                <% end %>
+              <% end %>
+              <%= link_to comic_path(comic.id) do %>
+                ⭐️<%= comic.reviews.average(:rate).to_f.round(1) %>
+              <% end %>
+              </div>
+          </div>
         <% end %>
-      </p>
-    <% else %>
-      <p>
-      <%= link_to comic_favorites_path(comic), method: :post do %>
-        ♡<%= comic.favorites.count %>
-      <% end %>
-      </p>
-    <% end %>
-    <%= link_to comic_path(comic.id) do %>
-      ⭐️<%= comic.reviews.average(:rate).to_f.round(1) %>
-    <% end %>
+      </div>
+    </div>
+
+  <% else %>
+
+   <div class="container my-5 custom-gutters-pro">
+       <h1>⭐️評価ランキング⭐️</h1>
+    <div class="row">
+        <% @all_ranks.each.with_index(1) do |comic, i| %>
+      <div class="col col-12 col-md-2 col-lg-2 m-lg-3">
+          <h5>第<%= i %>位</h5>
+          <%= link_to comic_path(comic.id) do %>
+            <p><%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg" %></p>
+          <% end %>
+          <%= comic.title %>
+          <div class="">
+          ♡<%= comic.favorites.count %>
+            <%= link_to comic_path(comic.id) do %>
+              ⭐️<%= comic.reviews.average(:rate).to_f.round(1) %>
+            <% end %>
+          </div>
+       </div>
+        <% end %>
+    </div>
+
+        <h1>💓お気に入りランキング💓</h1>
+      <div class="row">
+        <% @all_rank.each.with_index(1) do |comic, i| %>
+          <div class="col col-12 col-md-2 col-lg-2 m-lg-3">
+            第<%= i %>位
+            <%= link_to comic_path(comic.id) do %>
+              <p><%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg" %></p>
+            <% end %>
+            <%= comic.title %>
+            <div class="">
+                ♡<%= comic.favorites.count %>
+              <%= link_to comic_path(comic.id) do %>
+                ⭐️<%= comic.reviews.average(:rate).to_f.round(1) %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+       </div>
+    </div>
   <% end %>
-
-<% else %>
-
- <h1>評価ランキング</h1>
-  <% @all_ranks.each.with_index(1) do |comic, i| %>
-    第
-    <%= i %>
-    位
-    <%= link_to comic_path(comic.id) do %>
-      <p><%= attachment_image_tag comic, :image, size: "50x50", format: 'jpeg', fallback: "no_image.jpg" %></p>
-    <% end %>
-    <p><%= comic.title %></p>
-
-      <p>
-
-        ♡<%= comic.favorites.count %>
-
-      </p>
-
-    <%= link_to comic_path(comic.id) do %>
-      ⭐️<%= comic.reviews.average(:rate).to_f.round(1) %>
-    <% end %>
-  <% end %>
-
-  <h1>お気に入りランキング</h1>
-
-  <% @all_rank.each.with_index(1) do |comic, i| %>
-    第
-    <%= i %>
-    位
-    <%= link_to comic_path(comic.id) do %>
-      <p><%= attachment_image_tag comic, :image, size: "50x50", format: 'jpeg', fallback: "no_image.jpg" %></p>
-    <% end %>
-    <p><%= comic.title %></p>
-
-      <p>
-      <%= link_to comic_favorites_path(comic), method: :post do %>
-        ♡<%= comic.favorites.count %>
-      <% end %>
-      </p>
-    <%= link_to comic_path(comic.id) do %>
-      ⭐️<%= comic.reviews.average(:rate).to_f.round(1) %>
-    <% end %>
-  <% end %>
-<% end %>
+</div>

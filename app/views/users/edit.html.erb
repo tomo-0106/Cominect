@@ -1,17 +1,39 @@
-<h2>プロフィール編集</h2>
-<%= form_with model:@user, local:true do |f| %>
+<div class="container my-5 custom-gutters-pro">
 
-<%= attachment_image_tag @user, :profile_image, :fill, 60, 60, fallback: "no_image.jpg"%>
-  <label for="inputImage">ProfileImage</label>
-  <%= f.attachment_field :profile_image, placeholder: "プロフィール画像" %>
+  <h1>プロフィール編集</h1>
+  <%= form_with model:@user, local:true do |f| %>
 
-  <label for="inputName">名前</label>
-  <%= f.text_field :name, autofocus: true, id:"inputName", placeholder:"名前"%>
+  <div class="row mt-5 m-5">
+    <div class="col md-5">
+      <%= attachment_image_tag @user, :profile_image, :fill, 200, 200, fallback: "no_image.jpg", onClick: "$('.img_field').click()", class: 'center-block img-thumbnail img-responsive img_prev' %>
+      <%= f.attachment_field :profile_image, placeholder: "プロフィール画像", class: 'img_field' %>
+    </div>
+    
+    <div class="col md-4 m-5">
+      <div class="profile-name"><label for="inputName">名前</label></div>
+        <%= f.text_field :name, autofocus: true, id:"inputName", placeholder:"名前"%>
+      <div>
+        <label for="inputEmail">メールアドレス</label>
+      </div>
+      <%= f.text_field :email, autofocus: true, id:"inputEmail", placeholder:"メールアドレス", class: "form-control col-sm-8"%>
+      <%= f.submit "変更を保存" %>
+    </div>
+  </div>
+  <% end %>
+</div>
 
-   <label for="inputEmail">メールアドレス</label>
-  <%= f.text_field :email, autofocus: true, id:"inputEmail", placeholder:"メールアドレス"%>
+<script type="text/javascript">
+    function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $('.img_prev').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
 
-
-
-  <%= f.submit "変更を保存" %>
-<% end %>
+  $('.img_field').change(function () {
+    readURL(this);
+  });
+</script>

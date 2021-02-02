@@ -1,18 +1,19 @@
 class GenresController < ApplicationController
-
+  
   def new
     @genre = Genre.new
     @genres = Genre.all
   end
 
-  def show
-     @genre = Genre.find(params[:id])
-  end
 
   def create
     @genre = Genre.new(genre_params)
-    @genre.save
-    redirect_back(fallback_location: root_path)
+    if @genre.save
+      redirect_back(fallback_location: root_path)
+    else
+      @genres = Genre.all
+      render :new
+    end
   end
 
   def destroy
@@ -20,6 +21,7 @@ class GenresController < ApplicationController
     @genre.destroy
     redirect_to new_genre_path
   end
+  
 
   private
 
