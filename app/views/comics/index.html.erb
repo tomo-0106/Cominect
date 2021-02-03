@@ -44,7 +44,7 @@
                   <% @genre.comics.each do |comic| %>
                   <div class="col col-12 col-md-2 col-lg-3">
                         <%= link_to comic_path(comic.id) do %>
-                            <%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
+                            <%= attachment_image_tag comic, :image, size: "120x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
                         <% end %>
                         <div>
                           <strong class="red-border"><%= comic.title %></strong>
@@ -78,7 +78,7 @@
                   <% @comics.each do |comic| %>
                       <div class="col col-12 col-md-2 col-lg-3">
                         <%= link_to comic_path(comic.id) do %>
-                            <%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
+                            <%= attachment_image_tag comic, :image, size: "120x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
                         <% end %>
                         <div>
                           <strong class="red-border"><%= comic.title %></strong>
@@ -120,7 +120,7 @@
               <% @genre.comics.each do |comic| %>
                 <div class="col col-12 col-md-2 col-lg-3">
                   <%= link_to comic_path(comic.id) do %>
-                    <%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
+                    <%= attachment_image_tag comic, :image, size: "120x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
                   <% end %>
                   <div>
                     <strong class="red-border"><%= comic.title %></strong>
@@ -145,7 +145,7 @@
                 <% @comics.each do |comic| %>
                 <div class="col col-12 col-md-2 col-lg-3">
                   <%= link_to comic_path(comic.id) do %>
-                    <%= attachment_image_tag comic, :image, size: "200x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
+                    <%= attachment_image_tag comic, :image, size: "120x200", format: 'jpeg', fallback: "no_image.jpg",class: 'rounded' %>
                   <% end %>
                   <div>
                     <strong class="red-border"><%= comic.title %></strong>
